@@ -1,3 +1,5 @@
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -8,6 +10,30 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+
+passport.use(new FacebookStrategy({
+    clientID: "885959325103932",
+    clientSecret: "a255f3dacefa194e32e634e4d5b9d2e5",
+    callbackURL: 'https://paulinelocapic.herokuapp.com/auth/facebook/callback',
+
+    profileFields: ['id', 'first_name', 'last_name', 'email'],
+    passReqToCallback: true
+
+  },
+  function(accessToken, refreshToken, profile, done) {
+
+
+    var state = JSON.parse(req.query.state);
+
+    var mergeData = {...profile._json, redirectUrl : state.redirectUrl};
+
+    return done(null, mergeData);
+
+  }));
+
+app.use(passport.initialize());
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
