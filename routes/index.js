@@ -37,9 +37,9 @@ router.post('/logPosition', function (req, res, next) {
         user.save()
       } else {
         var newUser = new userModel({
-          firstname: 'toto',
-          lastname: 'tata',
-          email: 'toto@gmail.com',
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          email: req.body.email,
           facebookid: req.body.facebookid,
         })
         newUser.save((err, user) => {
